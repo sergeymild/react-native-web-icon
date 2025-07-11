@@ -12,6 +12,6 @@ class WebIconPackage : ReactPackage {
   }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf(WebIconViewManager())
+    return listOf(WebIconViewManager(reactContext))
   }
 }

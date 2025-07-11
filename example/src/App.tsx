@@ -1,10 +1,10 @@
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { WebIconView } from 'react-native-web-icon';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <WebIconView color="#32a852" style={styles.box} />
+      <WebIconView url="https://amazone.com" style={styles.box} />
     </View>
   );
 }
@@ -18,6 +18,5 @@ const styles = StyleSheet.create({
   box: {
     width: 60,
     height: 60,
-    marginVertical: 20,
   },
 });
