@@ -1,8 +1,9 @@
 import {
-  requireNativeComponent,
-  UIManager,
+  type ImageStyle,
   Platform,
-  type ViewStyle,
+  requireNativeComponent,
+  type StyleProp,
+  UIManager,
 } from 'react-native';
 
 const LINKING_ERROR =
@@ -13,7 +14,7 @@ const LINKING_ERROR =
 
 type WebIconProps = {
   url: string;
-  style: ViewStyle;
+  style: StyleProp<ImageStyle>;
 };
 
 const ComponentName = 'WebIconView';
