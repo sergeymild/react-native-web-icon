@@ -1,6 +1,7 @@
 package com.webicon
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.facebook.react.bridge.ReactApplicationContext
@@ -12,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.core.content.edit
 
 private fun getHostFromUrl(url: String): String {
   return try {
@@ -23,8 +25,10 @@ private fun getHostFromUrl(url: String): String {
   }
 }
 
-private fun getUrl(url: String): String {
-  return "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&size=128&fallback_opts=TYPE,SIZE,URL&url=${getHostFromUrl(url)}"
+private fun getUrl(url: String, preferences: SharedPreferences): String {
+  val iconPath = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&size=128&fallback_opts=TYPE,SIZE,URL&url=${getHostFromUrl(url)}"
+  preferences.edit { putString(url, iconPath) }
+  return iconPath
 }
 
 class WebIconViewManager(reactContext1: ReactApplicationContext) : SimpleViewManager<ImageView>() {
@@ -37,12 +41,11 @@ class WebIconViewManager(reactContext1: ReactApplicationContext) : SimpleViewMan
 
   @ReactProp(name = "url")
   fun setUrl(view: ImageView, url: String) {
-    //view.setBackgroundColor(Color.parseColor(color))
     GlobalScope.launch {
       val icons = FaviconFetcher.getForURL(url, preferences)
       var icon: String? = icons.getOrNull(0)
       if (icon == null || icon.endsWith(".ico")) {
-        icon = getUrl(url)
+        icon = getUrl(url, preferences)
       }
       withContext(Dispatchers.Main) {
         Glide.with(view)

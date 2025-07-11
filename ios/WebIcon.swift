@@ -11,7 +11,9 @@ private func getHostFromUrl(_ url: String) -> String {
 
 private func getUrl(_ url: String) -> String {
     let host = getHostFromUrl(url)
-    return "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&size=128&fallback_opts=TYPE,SIZE,URL&url=\(host)"
+    let iconPath = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&size=128&fallback_opts=TYPE,SIZE,URL&url=\(host)"
+  FaviconFetcher.userDefaults?.set(iconPath, forKey: url)
+  return iconPath
 }
 
 @objc(WebIconViewManager)
