@@ -1,6 +1,6 @@
 {
   "name": "react-native-web-icon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Native component for displaying website icons with automatic fallback to favicon",
   "main": "src/index",
   "module": "src/index",

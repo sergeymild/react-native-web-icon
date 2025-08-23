@@ -35,7 +35,9 @@ class WebIcon: UIImageView {
         icon =  getUrl(url)
       }
       guard let url = URL(string: icon ?? "") else { return }
-      self?.sd_setImage(with: url)
+      self?.sd_setImage(with: url, completed: { img, error, ca, u in
+        debugPrint("==-=-=-= ", error)
+      })
     }
   }
 }

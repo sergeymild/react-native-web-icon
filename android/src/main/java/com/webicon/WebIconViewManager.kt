@@ -31,16 +31,42 @@ private fun getUrl(url: String, preferences: SharedPreferences): String {
   return iconPath
 }
 
-class WebIconViewManager(reactContext1: ReactApplicationContext) : SimpleViewManager<ImageView>() {
+class MyImageView(context: Context) : androidx.appcompat.widget.AppCompatImageView(context) {
+  private var icon: String? = null
+  fun setIcon(icon: String) {
+    this.icon = icon
+    println("🐣 setIcon ${icon}")
+    Glide.with(this)
+      .load(icon)
+      .into(this)
+  }
+
+  override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    println("🐣 onDetachedFromWindow")
+  }
+
+  override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    println("🐣 onAttachedToWindow")
+    icon?.let {
+      Glide.with(this)
+        .load(icon)
+        .into(this)
+    }
+  }
+}
+
+class WebIconViewManager(reactContext1: ReactApplicationContext) : SimpleViewManager<MyImageView>() {
   private val preferences = reactContext1.getSharedPreferences("favicon", Context.MODE_PRIVATE)
   override fun getName() = "WebIconView"
 
-  override fun createViewInstance(reactContext: ThemedReactContext): ImageView {
-    return ImageView(reactContext)
+  override fun createViewInstance(reactContext: ThemedReactContext): MyImageView {
+    return MyImageView(reactContext)
   }
 
   @ReactProp(name = "url")
-  fun setUrl(view: ImageView, url: String) {
+  fun setUrl(view: MyImageView, url: String) {
     GlobalScope.launch {
       val icons = FaviconFetcher.getForURL(url, preferences)
       var icon: String? = icons.getOrNull(0)
@@ -48,9 +74,7 @@ class WebIconViewManager(reactContext1: ReactApplicationContext) : SimpleViewMan
         icon = getUrl(url, preferences)
       }
       withContext(Dispatchers.Main) {
-        Glide.with(view)
-          .load(icon)
-          .into(view)
+        view.setIcon(icon)
       }
     }
   }
